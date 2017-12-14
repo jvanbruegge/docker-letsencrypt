@@ -1,0 +1,29 @@
+version: "3.1"
+
+services:
+    root-nginx:
+        build: ./root-nginx
+        image: custom:root-nginx
+        networks:
+            - nginx
+        volumes:
+            - /data/nginx/ssl:/etc/ssl
+            - /data/letsencrypt:/etc/letsencrypt
+            - html:/var/www/html
+        ports:
+            - "80:80"
+            - "443:443"
+
+    letsencrypt:
+        build: ./letsencrypt
+        image: custom:letsencrypt
+        volumes:
+            - /data/letsencrypt:/etc/letsencrypt
+            - html:/var/www/html
+
+networks:
+    nginx:
+        external: true
+
+volumes:
+    html:
